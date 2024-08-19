@@ -58,7 +58,6 @@ class Lesson(models.Model):
 class Group(models.Model):
     """Модель группы."""
 
-    MAX_SIZE = 30
     course = models.ForeignKey(
         to='Course',
         on_delete=models.CASCADE

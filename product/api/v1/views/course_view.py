@@ -9,7 +9,8 @@ from api.v1.serializers.course_serializer import (CourseSerializer,
                                                   CreateGroupSerializer,
                                                   CreateLessonSerializer,
                                                   GroupSerializer,
-                                                  LessonSerializer)
+                                                  LessonSerializer,
+                                                  CourseExampleSerializer)
 from api.v1.serializers.user_serializer import SubscriptionSerializer
 from courses.models import Course
 from users.models import Subscription
@@ -54,7 +55,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    """Курсы """
+    """Курсы"""
 
     queryset = Course.objects.all()
     permission_classes = (ReadOnlyOrIsAdmin,)
@@ -78,3 +79,12 @@ class CourseViewSet(viewsets.ModelViewSet):
             data=data,
             status=status.HTTP_201_CREATED
         )
+
+
+class CourseExampleViewSet(viewsets.ModelViewSet):
+    def get_serializer_class(self):
+        return CourseExampleSerializer
+
+    def get_queryset(self):
+        sub_data = Subscription.objects.filter(user_id=self.request.user.pk).values('course_id')
+        return Course.objects.exclude(pk__in=sub_data)

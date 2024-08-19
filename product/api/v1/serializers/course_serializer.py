@@ -87,7 +87,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_lessons_count(self, obj):
         """Количество уроков в курсе."""
-        return Lesson.objects.all().count()
+        return Lesson.objects.filter(course_id=obj.pk).count()
 
     def get_students_count(self, obj):
         """Общее количество студентов на курсе."""
@@ -122,3 +122,22 @@ class CreateCourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Course
+
+
+class CourseExampleSerializer(serializers.ModelSerializer):
+
+    lessons_count = serializers.SerializerMethodField(read_only=True)
+
+    def get_lessons_count(self, instance):
+        return Lesson.objects.filter(course_id=instance.pk).count()
+
+    class Meta:
+        model = Course
+        fields = (
+            'id',
+            'author',
+            'title',
+            'start_date',
+            'price',
+            'lessons_count'
+        )

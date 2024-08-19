@@ -30,7 +30,7 @@ class CustomUser(AbstractUser):
 class Balance(models.Model):
     """Модель баланса пользователя."""
 
-    balance = models.IntegerField(
+    balance = models.PositiveIntegerField(
         default=1000,
         verbose_name='Баланс'
     )
@@ -38,6 +38,11 @@ class Balance(models.Model):
         to='CustomUser',
         on_delete=models.CASCADE
     )
+
+    def __sub__(self, other):
+        if isinstance(other, (int | float)):
+            return self.balance - other
+        return NotImplemented
 
     class Meta:
         verbose_name = 'Баланс'
@@ -48,7 +53,7 @@ class Balance(models.Model):
 class Subscription(models.Model):
     """Модель подписки пользователя на курс."""
 
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         to='CustomUser',
         on_delete=models.CASCADE
     )

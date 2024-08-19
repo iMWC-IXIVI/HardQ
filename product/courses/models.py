@@ -57,6 +57,8 @@ class Lesson(models.Model):
 
 class Group(models.Model):
     """Модель группы."""
+    CHOICES = [('1', '1 group'), ('2', '2 group'), ('3', '3 group'), ('4', '4 group'), ('5', '5 group'),
+               ('6', '6 group'), ('7', '7 group'), ('8', '8 group'), ('9', '9 group'), ('10', '10 group'), ]
 
     course = models.ForeignKey(
         to='Course',
@@ -65,6 +67,10 @@ class Group(models.Model):
     user = models.ForeignKey(
         to='users.CustomUser',
         on_delete=models.CASCADE
+    )
+    group = models.CharField(
+        max_length=4,
+        choices=CHOICES
     )
 
     class Meta:

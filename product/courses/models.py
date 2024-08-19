@@ -17,8 +17,9 @@ class Course(models.Model):
         auto_now_add=False,
         verbose_name='Дата и время начала курса'
     )
-
-    # TODO
+    price = models.IntegerField(
+        verbose_name='Стоимость'
+    )
 
     class Meta:
         verbose_name = 'Курс'
@@ -40,8 +41,10 @@ class Lesson(models.Model):
         max_length=250,
         verbose_name='Ссылка',
     )
-
-    # TODO
+    course = models.ForeignKey(
+        to='Course',
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         verbose_name = 'Урок'
@@ -55,7 +58,15 @@ class Lesson(models.Model):
 class Group(models.Model):
     """Модель группы."""
 
-    # TODO
+    MAX_SIZE = 30
+    course = models.ForeignKey(
+        to='Course',
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        to='users.CustomUser',
+        on_delete=models.CASCADE
+    )
 
     class Meta:
         verbose_name = 'Группа'

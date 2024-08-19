@@ -87,19 +87,19 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_lessons_count(self, obj):
         """Количество уроков в курсе."""
-        # TODO Доп. задание
+        return Lesson.objects.all().count()
 
     def get_students_count(self, obj):
         """Общее количество студентов на курсе."""
-        # TODO Доп. задание
+        return Group.objects.all().count()
 
     def get_groups_filled_percent(self, obj):
         """Процент заполнения групп, если в группе максимум 30 чел.."""
-        # TODO Доп. задание
+        return (Group.objects.all().count() / 30) * 100
 
     def get_demand_course_percent(self, obj):
         """Процент приобретения курса."""
-        # TODO Доп. задание
+        return (Subscription.objects.all().count()/ Group.objects.all().count()) * 100
 
     class Meta:
         model = Course

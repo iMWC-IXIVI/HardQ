@@ -18,10 +18,6 @@ class CustomUserSerializer(UserSerializer):
 class SubscriptionSerializer(serializers.ModelSerializer):
     """Сериализатор подписки."""
 
-    # TODO
-
     class Meta:
         model = Subscription
-        fields = (
-            # TODO
-        )
+        fields = '__all__'

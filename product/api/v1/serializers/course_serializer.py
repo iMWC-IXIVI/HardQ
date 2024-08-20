@@ -71,19 +71,22 @@ class MiniLessonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Lesson
-        fields = (
-            'title',
-        )
+        fields = ('title', )
 
 
 class CourseSerializer(serializers.ModelSerializer):
     """Список курсов."""
 
-    lessons = MiniLessonSerializer(many=True, read_only=True)
+    lessons = serializers.SerializerMethodField()
     lessons_count = serializers.SerializerMethodField(read_only=True)
     students_count = serializers.SerializerMethodField(read_only=True)
     groups_filled_percent = serializers.SerializerMethodField(read_only=True)
     demand_course_percent = serializers.SerializerMethodField(read_only=True)
+
+    def get_lessons(self, obj):
+        data = Lesson.objects.filter(course_id=obj.pk).values('title')
+        serializer = MiniLessonSerializer(data, many=True)
+        return serializer.data
 
     def get_lessons_count(self, obj):
         """Количество уроков в курсе."""
@@ -116,10 +119,10 @@ class CourseSerializer(serializers.ModelSerializer):
             'start_date',
             'price',
             'lessons_count',
-            'lessons',
             'demand_course_percent',
             'students_count',
             'groups_filled_percent',
+            'lessons',
         )
 
 

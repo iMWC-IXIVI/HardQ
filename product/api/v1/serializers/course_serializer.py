@@ -49,10 +49,9 @@ class StudentSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     """Список групп."""
 
-    # TODO Доп. задание
-
     class Meta:
         model = Group
+        fields = '__all__'
 
 
 class CreateGroupSerializer(serializers.ModelSerializer):

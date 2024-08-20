@@ -12,7 +12,7 @@ from api.v1.serializers.course_serializer import (CourseSerializer,
                                                   LessonSerializer,
                                                   CourseExampleSerializer)
 from api.v1.serializers.user_serializer import SubscriptionSerializer
-from courses.models import Course
+from courses.models import Course, Group
 from users.models import Subscription, Balance
 
 
@@ -51,7 +51,8 @@ class GroupViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         course = get_object_or_404(Course, id=self.kwargs.get('course_id'))
-        return course.groups.all()
+        group = Group.objects.filter(course=course)
+        return group
 
 
 class CourseViewSet(viewsets.ModelViewSet):

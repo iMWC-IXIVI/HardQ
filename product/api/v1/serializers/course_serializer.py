@@ -91,15 +91,21 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_students_count(self, obj):
         """Общее количество студентов на курсе."""
-        return Group.objects.filter()
+        return Group.objects.filter(course_id=obj.pk).count()
 
     def get_groups_filled_percent(self, obj):
         """Процент заполнения групп, если в группе максимум 30 чел.."""
-        return (Group.objects.all().count() / 30) * 100
+        return int((Group.objects.filter(course_id=obj.pk).count() / 30) * 100)
 
     def get_demand_course_percent(self, obj):
         """Процент приобретения курса."""
-        return (Subscription.objects.all().count()/ Group.objects.all().count()) * 100
+        st_group = Group.objects.filter(course_id=obj.pk).count()
+        st_sub = Subscription.objects.filter(course_id=obj.pk).count()
+
+        try:
+            return int((st_sub / st_group) * 100)
+        except ZeroDivisionError:
+            return 0
 
     class Meta:
         model = Course

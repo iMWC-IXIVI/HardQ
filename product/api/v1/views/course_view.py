@@ -3,8 +3,6 @@ from rest_framework import status, viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from django.db.models import Count, Min
-
 from api.v1.permissions import IsStudentOrIsAdmin, ReadOnlyOrIsAdmin
 from api.v1.serializers.course_serializer import (CourseSerializer,
                                                   CreateCourseSerializer,
@@ -14,7 +12,7 @@ from api.v1.serializers.course_serializer import (CourseSerializer,
                                                   LessonSerializer,
                                                   CourseExampleSerializer)
 from api.v1.serializers.user_serializer import SubscriptionSerializer
-from courses.models import Course, Group
+from courses.models import Course
 from users.models import Subscription, Balance
 
 
@@ -105,7 +103,3 @@ class CourseExampleViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         sub_data = Subscription.objects.filter(user_id=self.request.user.pk).values('course_id')
         return Course.objects.exclude(pk__in=sub_data)
-
-
-class PayExampleViewSet(viewsets.ModelViewSet):
-    pass
